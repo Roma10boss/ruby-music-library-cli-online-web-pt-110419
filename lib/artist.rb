@@ -1,61 +1,54 @@
-require 'pry'
-
 class Artist
-  attr_accessor :name, :song, :musiclibrarycontroller, :musicimporter
-  extend Concerns::Findable
-  @@all = []
-
+  
+  attr_reader :name
+  
   def initialize(name)
     @name = name
+    @@all = []
     @songs = []
   end
-
+  
+  def name=(name)
+    @name = name
+  end
+  
   def self.all
-    @@all
+    return @@all
   end
-
+  
   def self.destroy_all
-    @@all.clear
+    @@all = []
   end
-
+  
   def save
     @@all << self
   end
-
-  def self.create(artist)
-    artist = self.new(artist)
-    artist.save
-    artist
+  
+  def self.create(name)
+    newArtist = Artist.new(name)
+    newArtist.save
+    return newArtist
   end
-
+  
   def songs
-    @songs
+    return @songs
   end
-
+  
   def add_song(song)
-    if song.artist == nil
+    if (song.artist == nil)
       song.artist = self
-    else
-      nil
-    end
-    if @songs.include?(song)
-      nil
-    else
       @songs << song
+    else
+      # do not assign self to song.artist
     end
-    song
   end
-
+  
   def genres
-    @new_array = []
-    @songs.each do |song|
-      if @new_array.include?(song.genre)
-        nil
-      else
-        @new_array << song.genre
-      end
+    collectorArray = []
+    @songs.each do |song_object|
+      collectorArray << song_object.genre
     end
-    @new_array
+    return collectorArray.uniq
   end
-
+  
 end
